@@ -1,25 +1,25 @@
 # include "push_swap.h"
 
-void print(t_list stack, int no)
+void print(int **stack_a, int no)
 {
 	int i = 0;
 	printf("stack a%d:\n", no);
-	while(stack.stack_a[i] != NULL)
+	while(stack_a[i] != NULL)
 	{
-		printf("%d\n", *stack.stack_a[i]);
+		printf("%d\n", *stack_a[i]);
 		i++;
 	}
 	write (1, "\n", 1);
-	printf("stack a%d size: %d\n\n", no, stacksize(stack.stack_a));
-	i = 0;
-	printf("stack b%d:\n", no);
-	while (stack.stack_b[i] != NULL)
-	{
-		printf("%d\n", *stack.stack_b[i]);
-		i++;
-	}
-	write (1, "\n", 1);
-	printf("stack b%d size: %d\n\n", no, stacksize(stack.stack_b));
+	printf("stack a%d size: %d\n\n", no, stacksize(stack_a));
+//	i = 0;
+//	printf("stack b%d:\n", no);
+//	while (stack_b[i] != NULL)
+//	{
+//		printf("%d\n", *stack_b[i]);
+//		i++;
+//	}
+//	write (1, "\n", 1);
+//	printf("stack b%d size: %d\n\n", no, stacksize(stack_b));
 }
 
 int check_sorted_b(int **stack_b)
@@ -29,10 +29,12 @@ int check_sorted_b(int **stack_b)
 	if (stack_b[0] != NULL)
 	{
 		while (stack_b[i] && stack_b[j]) {
-			if (*stack_b[i] > *stack_b[j]) {
+			if (*stack_b[i] > *stack_b[j])
+			{
 				i++;
 				j++;
-			} else
+			}
+			else
 				return 0;
 		}
 		return 1;
@@ -58,12 +60,86 @@ int check_sorted_a (int ** stack_a)
 	return 1;
 }
 
+void	for_three(int **stack_a)
+{
+	int size;
+
+	size = stacksize(stack_a);
+	while (check_sorted_a(stack_a) != 1)
+	{
+		if (*stack_a[0] < *stack_a[1])
+			rev_rotate(stack_a, 'a');
+		if ((*stack_a[0] > *stack_a[1])
+		&& (*stack_a[size - 1] > *stack_a[0]))
+			swap(stack_a, 'a');
+		if (*stack_a[0] > *stack_a[1])
+			rotate(stack_a, 'a');
+	}
+}
+
+int search_less (int **stack_a)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (stack_a[i])
+	{
+		j = i + 1;
+		while (stack_a[j] && *stack_a[i] < *stack_a[j])
+			j++;
+		if (stack_a[j] == NULL)
+			break;
+		i++;
+	}
+	return *stack_a[i];
+}
+
+int search_index(int **stack)
+{
+	int i;
+	int small;
+
+	i = 0;
+	small = search_less(stack);
+	while (*stack[i] != small)
+		i++;
+	return i;
+}
+
+void for_five(t_list stack)
+{
+	int size_a;
+	int less;
+
+	size_a = stacksize(stack.stack_a);
+	while (size_a != 3)
+	{
+		less = search_less(stack.stack_a);
+		while (*stack.stack_a[0] != less)
+		{
+			if (search_index(stack.stack_a) <= size_a / 2)
+				rotate(stack.stack_a, 'a');
+			else
+				rev_rotate(stack.stack_a, 'a');
+		}
+		push(stack.stack_a, stack.stack_b, 'b');
+		size_a = stacksize(stack.stack_a);
+	}
+	for_three(stack.stack_a);
+	if (stack.stack_b[1] && *stack.stack_b[0] < *stack.stack_b[1])
+		swap(stack.stack_b, 'b');
+	while (*stack.stack_b != NULL)
+		push(stack.stack_b, stack.stack_a, 'a');
+}
+
+
 int main(int argc, char **argv)
 {
 	t_list stack;
 	int i;
-	int size_a;
-	int size_b = 0;
+//	int size_a;
+//	int size_b = 0;
 
 	i = 0;
 
@@ -73,152 +149,23 @@ int main(int argc, char **argv)
 		return 0;
 	}
 	stack = check_arguments(argc, argv);
+
 	if (check_sorted_a(stack.stack_a))
 	{
 		free(stack.stack_b);
-		while (stack.stack_a[i] != NULL) {
+		while (stack.stack_a[i] != NULL)
+		{
 			free(stack.stack_a[i]);
 			i++;
 		}
 		free(stack.stack_a);
-		return 0;
+		write(1, "Stack is already sorted\n", 24);
+		return 1;
 	}
-
-//	print(stack, 1);
-
-
-	while (stack.stack_a[1] != NULL)
-	{
-		size_a = stacksize(stack.stack_a);
-		size_b = stacksize(stack.stack_b);
-
-		if (stack.stack_a[1]
-			&& *stack.stack_a[0] > *stack.stack_a[1]
-			&& *stack.stack_a[0] > *stack.stack_a[size_a - 1])
-		{
-			rotate(stack.stack_a, 'a');
-//			print(stack, 5);
-			if (check_sorted_a(stack.stack_a))
-				break;
-			continue;
-		}
-		if (stack.stack_b[1]
-			&& *stack.stack_b[0] < *stack.stack_b[1]
-			&& *stack.stack_b[0] < *stack.stack_b[size_b - 1])
-		{
-			rotate(stack.stack_b, 'b');
-			continue;
-		}
-		if ((stack.stack_a[1]
-			&& *stack.stack_a[0] > *stack.stack_a[1]
-			&& *stack.stack_a[0] > *stack.stack_a[size_a - 1]
-			&& (stack.stack_b[1]
-			&& *stack.stack_b[0] < *stack.stack_b[1]
-			&& *stack.stack_b[0] < *stack.stack_b[size_b - 1])))
-		{
-			rr(&stack);
-			continue;
-		}
-
-
-		if (stack.stack_a[1]
-			&& *stack.stack_a[size_a - 1] < *stack.stack_a[0]
-			&& *stack.stack_a[size_a - 1] < *stack.stack_a[1])
-		{
-			rev_rotate(stack.stack_a, 'a');
-			if (check_sorted_a(stack.stack_a))
-				break;
-			continue;
-		}
-		if (stack.stack_b[1]
-			&& *stack.stack_b[size_b - 1] > *stack.stack_b[0]
-			&& *stack.stack_b[size_b - 1] > *stack.stack_b[1])
-		{
-			rev_rotate(stack.stack_b, 'b');
-			continue;
-		}
-		if ((stack.stack_a[1]
-			&& *stack.stack_a[size_a - 1] < *stack.stack_a[0]
-			 && *stack.stack_a[size_a - 1] < *stack.stack_a[1])
-			 && (stack.stack_b[1]
-			 && *stack.stack_b[size_b - 1] > *stack.stack_b[0]
-			 && *stack.stack_b[size_b - 1] > *stack.stack_b[1]))
-		{
-			rrr(&stack);
-			continue;
-		}
-
-
-		if (stack.stack_a[1]
-			&& *stack.stack_a[0] > *stack.stack_a[1]
-			&& *stack.stack_a[0] < *stack.stack_a[size_a - 1])
-		{
-			swap(stack.stack_a, 'a');
-			if (check_sorted_a(stack.stack_a) && *stack.stack_a[0] > *stack.stack_b[0])
-				break;
-			continue;
-		}
-		if (stack.stack_b[1]
-			&& *stack.stack_b[0] < *stack.stack_b[1]
-			&& *stack.stack_b[0] > *stack.stack_b[size_b - 1])
-		{
-			swap(stack.stack_b, 'b');
-			continue;
-		}
-		if ((stack.stack_a[1] && *stack.stack_a[0] > *stack.stack_a[1] &&
-			 *stack.stack_a[0] < *stack.stack_a[size_a - 1]
-			 && (stack.stack_b[1]
-			 && *stack.stack_b[0] < *stack.stack_b[1]
-			 && *stack.stack_b[0] > *stack.stack_b[size_b - 1])))
-		{
-			ss(&stack);
-			continue;
-		}
-
-		if (*stack.stack_a[0] < *stack.stack_a[1]
-			&& *stack.stack_a[0] < *stack.stack_a[size_a - 1])
-		{
-			push(stack.stack_a, stack.stack_b, 'b');
-			continue;
-		}
-		if (check_sorted_a(stack.stack_a))
-			break;
-
-	}
-//	write (1, "\n", 1);
-//	print(stack, 2);
-//	write (1, "\n", 1);
-	size_b = stacksize(stack.stack_b);
-	while(size_b != 0)
-	{
-		size_b = stacksize(stack.stack_b);
-//		size_b--;
-		if (!stack.stack_b[1] || (*stack.stack_b[0] < *stack.stack_a[0] && *stack.stack_b[0] > *stack.stack_b[1]))
-		{
-			push(stack.stack_b, stack.stack_a, 'a');
-			size_b--;
-			continue;
-		}
-		if (stack.stack_b[1] && *stack.stack_b[0] < *stack.stack_b[1])
-		{
-			swap(stack.stack_b, 'b');
-			continue;
-		}
-		if (stack.stack_a[1]
-			&& *stack.stack_a[0] > *stack.stack_a[1]
-			&& *stack.stack_a[0] < *stack.stack_a[size_a - 1])
-		{
-			swap(stack.stack_a, 'a');
-			continue;
-		}
-	}
-	print(stack, 2);
-	free(stack.stack_b);
-	while (stack.stack_a[i] != NULL)
-	{
-		free (stack.stack_a[i]);
-		i++;
-	}
-	free (stack.stack_a);
-
+	if (argc <= 4)
+		for_three(stack.stack_a);
+	if (argc <= 6)
+		for_five(stack);
+	print(stack.stack_a, 1);
+	return 0;
 }
