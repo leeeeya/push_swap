@@ -43,10 +43,10 @@ void check_digits (char **argv)
 	}
 }
 
-t_list check_arguments(int argc, char *argv[])
+t_struct check_arguments(int argc, char *argv[])
 {
 	int i;
-	t_list stack;
+	t_struct stack;
 
 	i = 0;
 
@@ -54,20 +54,16 @@ t_list check_arguments(int argc, char *argv[])
 		exit(1);
 	check_digits(argv);
 	stack.stack_a = (int **)ft_calloc(argc, sizeof(int *));
+	mem_error_handler(stack.stack_a);
 	while (i != argc - 1)
 	{
 		stack.stack_a[i] = (int *)ft_calloc(1, sizeof (int));
+		mem_error_handler(stack.stack_a[i]);
 		i++;
 	}
 	i = 0;
 	stack.stack_b = (int **)ft_calloc(argc, sizeof(int *));
-//	while (i != argc - 1)
-//	{
-//		stack.stack_b[i] = (int *)ft_calloc(1, sizeof (int));
-//		i++;
-//	}
-//	stack.stack_b[0] = NULL;
-//	printf("%d\n", stacksize(stack.stack_b));
+	mem_error_handler(stack.stack_b);
 	i = 1;
 	while(argv[i] != NULL)
 	{

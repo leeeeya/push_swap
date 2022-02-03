@@ -84,7 +84,7 @@ void	swap(int **stack, char stack_name)
 	}
 }
 
-void ss(t_list *stack)
+void ss(t_struct *stack)
 {
 	swap(stack->stack_a, 'w');
 	swap(stack->stack_b, 'w');
@@ -113,7 +113,7 @@ void rotate(int **stack, char stack_name)
 	}
 }
 
-void rr(t_list *stack)
+void rr(t_struct *stack)
 {
 	rotate(stack->stack_a, 'w');
 	rotate(stack->stack_b, 'w');
@@ -137,7 +137,7 @@ void rev_rotate(int **stack, char stack_name)
 		write(1, "rrb\n", 4);
 }
 
-void rrr(t_list *stack)
+void rrr(t_struct *stack)
 {
 	rev_rotate(stack->stack_a, 'w');
 	rev_rotate(stack->stack_b, 'w');

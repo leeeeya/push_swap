@@ -3,3 +3,4 @@ CMakeLists.txt
 cmake-build-debug
 a.out
 .DS_Store
+/push_swap.h.gch
