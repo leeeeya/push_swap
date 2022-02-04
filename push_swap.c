@@ -77,7 +77,11 @@ int main(int argc, char **argv)
 		write(1, "\n", 1);
 		return 0;
 	}
+	printf("%d\n", count_all(argv));
+	exit(0);
+
 	stack = check_arguments(argc, argv);
+
 
 //	printf("%d\n", search_max(stack.stack_a));
 
@@ -94,7 +98,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	for_three(stack.stack_a);
-//	if (argc <= 6)
+	if (argc <= 6)
 		for_five(stack);
 //	print(stack.stack_a, 1);
 	return 0;

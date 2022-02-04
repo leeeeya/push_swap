@@ -33,4 +33,5 @@ void	for_three(int **stack_a);
 int		check_sorted_a (int ** stack_a);
 int		search_max (int **stack);
 void 	big_sort(t_struct stack);
+int		count_all(char **argv);
 #endif //PUSH_SWAP_H

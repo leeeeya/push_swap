@@ -43,6 +43,30 @@ void check_digits (char **argv)
 	}
 }
 
+//int	count_arg(char *argv)
+//{
+//
+//}
+
+int count_all(char **argv)
+{
+	int i;
+	int count;
+
+	count = 0;
+	i = 0;
+	while (argv[i] != NULL)
+	{
+		if (ft_strchr(argv[i], ' '))
+			count += ft_word_count(argv[i], ' ');
+		else
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+
 t_struct check_arguments(int argc, char *argv[])
 {
 	int i;
@@ -50,8 +74,18 @@ t_struct check_arguments(int argc, char *argv[])
 
 	i = 0;
 
-	if (argc <= 1)
-		exit(1);
+
+	while (argv[i] != NULL)
+	{
+		if (ft_strchr(argv[i], ' '))
+		{
+			write (1, "There are ARG\n", 14);
+			exit (0);
+		}
+		i++;
+	}
+
+
 	check_digits(argv);
 	stack.stack_a = (int **)ft_calloc(argc, sizeof(int *));
 	mem_error_handler(stack.stack_a);
