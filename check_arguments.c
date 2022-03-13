@@ -1,109 +1,76 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_arguments.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cstefany <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/10 11:50:34 by cstefany          #+#    #+#             */
+/*   Updated: 2022/03/10 11:50:38 by cstefany         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
-void check_duplicates(int **stack)
+size_t	larger_len(char *a_arg, char *cmp_arg)
 {
-	int i;
-	int j;
+	size_t	len_a;
+	size_t	len_cmp;
 
-	i = 0;
-	while (stack[i] != NULL)
+	len_a = ft_strlen(a_arg);
+	len_cmp = ft_strlen(cmp_arg);
+	if (len_a >= len_cmp)
+		return (len_a);
+	else
+		return (len_cmp);
+}
+
+void	check_duplicates(t_stack *a)
+{
+	t_stack	*cmp;
+
+	cmp = NULL;
+	if (a->next)
+		cmp = a->next;
+	while (a)
 	{
-		j = i + 1;
-		while (stack[j])
+		while (cmp)
 		{
-			if(*stack[i] == *stack[j])
+			if (!ft_strncmp(a->argv, cmp->argv, larger_len(a->argv, cmp->argv)))
 				arg_error_handler(15);
-			j++;
+			cmp = cmp->next;
 		}
-		i++;
+		a = a->next;
+		if (a)
+			cmp = a->next;
 	}
 }
 
-void check_digits (char **argv)
+void	check_digits(t_stack *a)
 {
-	int i;
-	int j;
+	int	i;
 
-	i = 1;
-	while(argv[i])
+	i = 0;
+	while (a)
 	{
-		j = 0;
-		if (argv[i][j] == '-' && (argv[i][j + 1] > 48 && argv[i][j + 1] < 58))
-			j++;
-		if (argv[i][0] == '0' && argv[i][1] != '\0')
-			arg_error_handler(34);
-		while (argv[i][j])
+		if (a->argv[0] == '-' && a->argv[1] > 48 && a->argv[1] < 58)
+			i++;
+		if (a->argv[0] == '0' && a->argv[1] != '\0')
+			arg_error_handler(33);
+		while (a->argv[i])
 		{
-			if (argv[i][j] > 47 && argv[i][j] < 58)
-				j++;
+			if (a->argv[i] > 47 && a->argv[i] < 58)
+				i++;
 			else
-				arg_error_handler(40);
+				arg_error_handler(39);
 		}
-		i++;
+		i = 0;
+		a = a->next;
 	}
 }
 
-//int	count_arg(char *argv)
-//{
-//
-//}
-
-int count_all(char **argv)
+void	check_arguments(t_stack *a)
 {
-	int i;
-	int count;
-
-	count = 0;
-	i = 0;
-	while (argv[i] != NULL)
-	{
-		if (ft_strchr(argv[i], ' '))
-			count += ft_word_count(argv[i], ' ');
-		else
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-
-t_struct check_arguments(int argc, char *argv[])
-{
-	int i;
-	t_struct stack;
-
-	i = 0;
-
-
-	while (argv[i] != NULL)
-	{
-		if (ft_strchr(argv[i], ' '))
-		{
-			write (1, "There are ARG\n", 14);
-			exit (0);
-		}
-		i++;
-	}
-
-
-	check_digits(argv);
-	stack.stack_a = (int **)ft_calloc(argc, sizeof(int *));
-	mem_error_handler(stack.stack_a);
-	while (i != argc - 1)
-	{
-		stack.stack_a[i] = (int *)ft_calloc(1, sizeof (int));
-		mem_error_handler(stack.stack_a[i]);
-		i++;
-	}
-	i = 0;
-	stack.stack_b = (int **)ft_calloc(argc, sizeof(int *));
-	mem_error_handler(stack.stack_b);
-	i = 1;
-	while(argv[i] != NULL)
-	{
-		*(stack.stack_a[i - 1]) = ft_atoi(argv[i]);
-		i++;
-	}
-	check_duplicates(stack.stack_a);
-	return (stack);
+	check_digits(a);
+	check_duplicates(a);
 }

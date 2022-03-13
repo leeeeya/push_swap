@@ -25,7 +25,7 @@ void	ft_check(const char *str, int *p_i, int *p_minus)
 
 void	error(int str)
 {
-	write(2, "ERROR: atoi\n", 11);
+	write(2, "ERROR: atoi\n", 12);
 	exit(str);
 }
 

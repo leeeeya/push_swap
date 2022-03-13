@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_toupper.c                                       :+:      :+:    :+:   */
+/*   checker.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cstefany <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/04 23:14:41 by cstefany          #+#    #+#             */
-/*   Updated: 2021/10/04 23:14:42 by cstefany         ###   ########.fr       */
+/*   Created: 2022/03/12 17:15:17 by cstefany          #+#    #+#             */
+/*   Updated: 2022/03/12 17:15:18 by cstefany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_toupper(int ch)
-{
-	if (ch > 96 && ch < 123)
-		ch -= 32;
-	return (ch);
-}
+#ifndef CHECKER_H
+# define CHECKER_H
+
+# include "../push_swap.h"
+# include "get_next_line.h"
+
+#endif

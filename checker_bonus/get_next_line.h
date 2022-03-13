@@ -1,19 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cstefany <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/04 22:51:46 by cstefany          #+#    #+#             */
-/*   Updated: 2021/10/04 22:51:49 by cstefany         ###   ########.fr       */
+/*   Created: 2021/11/06 20:18:22 by cstefany          #+#    #+#             */
+/*   Updated: 2021/11/06 20:18:24 by cstefany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-void	ft_putstr_fd(char *s, int fd)
-{
-	if (s != NULL)
-		write(fd, s, ft_strlen(s));
-}
+# define BUFFER_SIZE 4
+
+# include <stdlib.h>
+# include <unistd.h>
+
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strchr(const char *str, int chr);
+char	*ft_strdup(const char *s);
+char	*get_next_line(int fd);
+size_t	ft_strlen(char const *s);
+
+#endif
